@@ -1,0 +1,11 @@
+[portainer]
+10.116.25.84
+
+[webserver]
+10.116.25.93
+
+[webadministracion]
+10.116.26.13
+
+[sqlserver]
+10.116.25.92
