@@ -1,0 +1,48 @@
+# Playbook de despliegue del servicio Web
+- name: Web Server
+  hosts: webserver
+  become: yes
+  tasks:
+# Instalamos apache
+    - name: Instalar Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+# Iniciamos apache
+    - name: Iniciar Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+# Instalamos el servicio de firewall que en debian no viene por defecto
+    - name: Instalar ufw
+      apt:
+       name: ufw
+       state: present
+# Lo activamos
+    - name: Activar ufw
+      ufw:
+        state: enabled
+# Permitimos el puerto 22 para que se pueda conectar Ansible siempre
+    - name: Permitir puerto 22
+      ufw:
+       rule: allow
+       name: OpenSSH
+
+# Permitimos el puerto 80 que es en el cuál se desplegará la página
+    - name: Habilitar puerto 50000
+      ufw:
+        rule: allow
+        port: '50000'
+        proto: tcp
+
+# Copiamos el archivo index.html del nodo de control al nodo gestionado para que sepa que .html desplegar
+    - name: Copiar archivo index.html
+      copy:
+        src: index.html
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
