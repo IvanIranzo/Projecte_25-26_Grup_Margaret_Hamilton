@@ -42,7 +42,7 @@
     - name: Copiar archivo index.html
       copy:
         src: index.html
-        dest: /var/www/html/index.html
+        dest: /var/www/web-cole/index.html
         owner: www-data
         group: www-data
         mode: '0644'
