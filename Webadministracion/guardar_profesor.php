@@ -1,52 +1,42 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Alta de Profesor - Sistema Académico</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 450px; }
-        h2 { color: #2c3e50; text-align: center; margin-bottom: 20px; }
-        label { display: block; margin-top: 10px; font-weight: bold; color: #34495e; }
-        input, select { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #dcdde1; border-radius: 5px; box-sizing: border-box; }
-        .btn { background: #8e44ad; color: white; border: none; padding: 12px; width: 100%; border-radius: 5px; cursor: pointer; margin-top: 20px; font-size: 16px; }
-        .btn:hover { background: #732d91; }
-        .back { display: block; text-align: center; margin-top: 15px; color: #7f8c8d; text-decoration: none; font-size: 14px; }
-        .back:hover { text-decoration: underline; }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <h2>Registro de Profesor</h2>
-        <form action="guardar_profesor.php" method="POST">
-            <label>ID Persona (DNI/NIE):</label>
-            <input type="number" name="id_persona" required>
+<?php
+$host = "10.116.25.92";
+$user = "secretaria1";
+$pass = "1234567890ab";
+$db   = "gestion_escolar";
 
-            <label>Nombre:</label>
-            <input type="text" name="nombre" required>
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) { die("Conexión fallida: " . $conn->connect_error); }
 
-            <label>Primer Apellido:</label>
-            <input type="text" name="apellido1" required>
+// Recoger datos
+$id       = $_POST['id_persona'];
+$nombre   = $_POST['nombre'];
+$ape1     = $_POST['apellido1'];
+$ape2     = $_POST['apellido2'];
+$correo   = $_POST['correo'];
+$estado   = $_POST['estado_cuenta'];
+$titulo   = $_POST['titulo_academico'];
 
-            <label>Segundo Apellido:</label>
-            <input type="text" name="apellido2">
+// Iniciar transacción para asegurar que se graben ambas tablas o ninguna
+$conn->begin_transaction();
+try {
+    // 1. Insertar en la tabla Persona
+    $sql1 = "INSERT INTO Persona (ID_persona, Nombre, Apellido1, Apellido2, correo, estado_cuenta)
+             VALUES ('$id', '$nombre', '$ape1', '$ape2', '$correo', '$estado')";
+    $conn->query($sql1);
 
-            <label>Correo Electrónico:</label>
-            <input type="email" name="correo" required>
+    // 2. Insertar en la tabla Profesor
+    $sql2 = "INSERT INTO Profesor (ID_profesor, titulo_academico)
+             VALUES ('$id', '$titulo')";
+    $conn->query($sql2);
 
-            <label>Título Académico:</label>
-            <input type="text" name="titulo_academico" placeholder="Ej: Doctor en Informática" required>
+    // Si todo va bien, confirmar cambios
+    $conn->commit();
+    header("Location: index.php?status=success");
+} catch (Exception $e) {
+    // Si algo falla, deshacer todo
+    $conn->rollback();
+    echo "Error crítico: " . $e->getMessage();
+}
 
-            <label>Estado de Cuenta:</label>
-            <select name="estado_cuenta">
-                <option value="Activo">Activo</option>
-                <option value="Pendiente">Pendiente</option>
-                <option value="Inactivo">Inactivo</option>
-            </select>
-
-            <button type="submit" class="btn">Guardar Profesor</button>
-        </form>
-        <a href="index.php" class="back">← Volver al panel</a>
-    </div>
-</body>
-</html>
+$conn->close();
+?>
