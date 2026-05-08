@@ -1,0 +1,89 @@
+Link A la carpeta del proyecto: 
+https://drive.google.com/drive/folders/1LeveY_x3X0285oGx_-MP1dYpnIBgCkBt?usp=sharing 
+
+# 🎯 Quiz App - Documentación de Archivos Editados
+
+## 📁 Estructura de Archivos Modificados/Creados
+
+### 🎮 Controladores Principales (app/Http/Controllers/)
+- **`QuizController.php`** - Controlador principal de quizzes (mostrar, enviar, resultados)
+- **`RandomQuizController.php`** - Generación de quizzes aleatorios desde API externa
+- **`CustomQuizController.php`** - Creación de quizzes personalizados por usuarios
+- **`GroupController.php`** - Gestión de grupos (públicos/privados, miembros, solicitudes)
+- **`RankingController.php`** - Rankings globales y por grupo
+
+### 🗄️ Modelos (app/Models/)
+- **`Quiz.php`** - Modelo de quizzes (relaciones, scopes, visibilidad)
+- **`Group.php`** - Modelo de grupos (miembros, solicitudes pendientes, privacidad)
+- **`QuizAttempt.php`** - Intentos de quizzes + método `hasTaken()`
+- **`Subject.php`** - Materias/Categorías
+- **`User.php`** - Relaciones con grupos y puntuaciones globales
+
+### 📄 Vistas Principales (resources/views/)
+
+**Layouts:**
+- **`layouts/app.blade.php`** - Layout principal con logo y navegación
+
+**Subjects:**
+- **`subjects/index.blade.php`** - Página principal con todas las materias
+- **`subjects/quizzes.blade.php`** - Lista completa de quizzes por materia
+
+**Quizzes:**
+- **`quizzes/show.blade.php`** - Página para tomar un quiz
+- **`quizzes/result.blade.php`** - Resultados después de completar un quiz
+- **`quizzes/random.blade.php`** - Generador de quizzes aleatorios
+
+**Groups:**
+- **`groups/index.blade.php`** - Lista de grupos públicos
+- **`groups/show.blade.php`** - Detalle del grupo (miembros, solicitudes)
+- **`groups/create.blade.php`** - Crear nuevo grupo
+- **`groups/edit.blade.php`** - Editar grupo
+
+**Rankings:**
+- **`rankings/global.blade.php`** - Ranking global de usuarios
+- **`rankings/group.blade.php`** - Ranking dentro de un grupo
+
+**Custom Quizzes:**
+- **`quizzes/custom/create.blade.php`** - Crear quiz personalizado
+- **`quizzes/custom/edit.blade.php`** - Editar quiz personalizado
+- **`quizzes/custom/my.blade.php`** - Mis quizzes creados
+
+### 🗺️ Rutas (routes/)
+- **`web.php`** - Todas las rutas de la aplicación (autenticación, quizzes, grupos, rankings)
+
+### 🗃️ Migraciones (database/migrations/)
+- `*_create_subjects_table.php`
+- `*_create_quizzes_table.php`
+- `*_create_questions_table.php`
+- `*_create_options_table.php`
+- `*_create_quiz_attempts_table.php`
+- `*_create_answers_table.php`
+- `*_create_groups_table.php`
+- `*_create_group_members_table.php`
+- Migraciones adicionales:
+  - `*_add_status_to_group_members_table.php` - Solicitudes de grupos
+  - `*_add_privacy_to_groups_table.php` - Grupos públicos/privados
+  - `*_add_is_published_to_quizzes_table.php` - Publicar/ocultar quizzes
+
+### 🌱 Seeders (database/seeders/)
+- **`SubjectSeeder.php`** - Materias iniciales (Literatura, Historia, Química, Física)
+- **`RealQuestionsSeeder.php`** - Preguntas reales para los quizzes iniciales
+
+### 🛠️ Servicios (app/Services/)
+- **`QuizApiService.php`** - Servicio para consumir API de preguntas (Open Trivia Database)
+
+### 🎨 Recursos Públicos (public/)
+- **`images/logo.png`** - Logo de la aplicación 
+
+### ⚙️ Comandos Personalizados (app/Console/Commands/)
+- **`GenerateRandomQuiz.php`** - Comando CLI para generar quizzes desde API
+
+## 🎯 Funcionalidades Implementadas
+
+1. ✅ **Quizzes por materia** - 4 materias base con 2 quizzes cada una
+2. ✅ **Sistema de intento único** - Cada quiz solo se puede tomar una vez (evita farming)
+3. ✅ **Quizzes aleatorios** - Generados desde API externa (Open Trivia Database)
+4. ✅ **Quizzes personalizados** - Usuarios pueden crear sus propios quizzes
+5. ✅ **Sistema de grupos** - Públicos/privados con solicitud de aprobación
+6. ✅ **Rankings** - Globales y por grupo
+7. ✅ **Logo personalizado** 
